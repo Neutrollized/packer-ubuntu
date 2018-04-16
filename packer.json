@@ -83,6 +83,10 @@
       "user": "{{user `packer_user`}}",
       "extra_arguments": ["--verbose", "--diff"],
       "playbook_file": "{{pwd}}/ansible/playbook.yml"
+    },
+    {
+      "type": "shell",
+      "script": "{{pwd}}/scripts/cleanup.sh"
     }
   ],
   "post-processors": [
