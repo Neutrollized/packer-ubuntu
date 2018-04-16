@@ -7,4 +7,5 @@
 apt-get clean
 
 # remove old kernels
-ap-get autoremove --purge
+purge-old-kernels --keep 1 -qy
+apt-get autoremove --purge
