@@ -86,6 +86,12 @@
     },
     {
       "type": "shell",
+      "environment_vars": [
+        "PACKER_USER={{user `packer_user`}}",
+        "PACKER_PASSWORD={{user `packer_password`}}"
+      ],
+      "expect_disconnect": true,
+      "execute_command": "echo '{{user `packer_user`}}' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
       "script": "{{pwd}}/scripts/cleanup.sh"
     }
   ],
