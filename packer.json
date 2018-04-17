@@ -92,7 +92,10 @@
       ],
       "expect_disconnect": true,
       "execute_command": "echo '{{user `packer_user`}}' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
-      "script": "{{pwd}}/scripts/cleanup.sh"
+      "scripts": [
+        "{{pwd}}/scripts/cleanup.sh",
+        "{{pwd}}/scripts/minimize.sh"
+      ]
     }
   ],
   "post-processors": [
