@@ -8,7 +8,6 @@ case "$?" in
     2|0) ;;
     *) exit 1 ;;
 esac
-set -e
 
 echo '==> Clear out swap and disable until reboot'
 if [ "x${SWAPUUID}" != "x" ]; then

@@ -71,7 +71,7 @@
       "type": "shell",
       "inline": [
         "sudo apt-get install -y virtualbox-guest-dkms build-essential linux-headers-generic linux-headers-virtual",
-        "sudo apt-get upgrade -y"
+        "sudo apt-get dist-upgrade -y"
       ]
     },	
     {
