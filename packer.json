@@ -69,14 +69,16 @@
   "provisioners": [
     {
       "type": "shell",
-      "inline": [
-        "sudo apt-get install -y virtualbox-guest-dkms build-essential linux-headers-generic linux-headers-virtual",
-        "sudo apt-get dist-upgrade -y"
+      "environment_vars": [
+        "PACKER_USER={{user `packer_user`}}",
+        "PACKER_PASSWORD={{user `packer_password`}}"
+      ],
+      "expect_disconnect": true,
+      "execute_command": "echo '{{user `packer_user`}}' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
+      "scripts": [
+        "{{pwd}}/scripts/remove_unused.sh",
+        "{{pwd}}/scripts/reboot.sh"
       ]
-    },	
-    {
-      "type": "shell",
-      "script": "{{pwd}}/scripts/reboot.sh"
     },
     {
       "type": "ansible",
@@ -91,6 +93,18 @@
         "PACKER_PASSWORD={{user `packer_password`}}"
       ],
       "expect_disconnect": true,
+      "execute_command": "echo '{{user `packer_user`}}' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
+      "scripts": [
+        "{{pwd}}/scripts/update.sh",
+        "{{pwd}}/scripts/reboot.sh"
+      ]
+    },
+    {
+      "type": "shell",
+      "environment_vars": [
+        "PACKER_USER={{user `packer_user`}}",
+        "PACKER_PASSWORD={{user `packer_password`}}"
+      ],
       "execute_command": "echo '{{user `packer_user`}}' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
       "scripts": [
         "{{pwd}}/scripts/cleanup.sh",
