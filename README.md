@@ -9,6 +9,11 @@
 
 * upload your Ubuntu server ISO to the iso directory
 * enter in the ISO name, checksum and checksum type in the packer.json variables block at the top for the appropriate variables
+ 
+
+### Notes
+
+* [bcc-tools/IO Visor](https://www.iovisor.org) is installed, if you don't want that then leave it out of provisioners :)
 
 
 ### TODO
