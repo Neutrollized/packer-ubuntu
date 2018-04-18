@@ -1,6 +1,6 @@
-#!/usr/bin/env bash
-set -x
+#!/bin/bash
+set -eux
 
+/sbin/shutdown -r now
 
-reboot
 sleep 60

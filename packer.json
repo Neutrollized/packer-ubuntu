@@ -76,25 +76,7 @@
       "expect_disconnect": true,
       "execute_command": "echo '{{user `packer_user`}}' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
       "scripts": [
-        "{{pwd}}/scripts/remove_unused.sh",
-        "{{pwd}}/scripts/reboot.sh"
-      ]
-    },
-    {
-      "type": "ansible",
-      "user": "{{user `packer_user`}}",
-      "extra_arguments": ["--verbose", "--diff"],
-      "playbook_file": "{{pwd}}/ansible/playbook.yml"
-    },
-    {
-      "type": "shell",
-      "environment_vars": [
-        "PACKER_USER={{user `packer_user`}}",
-        "PACKER_PASSWORD={{user `packer_password`}}"
-      ],
-      "expect_disconnect": true,
-      "execute_command": "echo '{{user `packer_user`}}' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
-      "scripts": [
+        "{{pwd}}/scripts/virtualbox-guest.sh",
         "{{pwd}}/scripts/update.sh",
         "{{pwd}}/scripts/reboot.sh"
       ]
@@ -105,11 +87,18 @@
         "PACKER_USER={{user `packer_user`}}",
         "PACKER_PASSWORD={{user `packer_password`}}"
       ],
+      "expect_disconnect": true,
       "execute_command": "echo '{{user `packer_user`}}' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
       "scripts": [
         "{{pwd}}/scripts/cleanup.sh",
         "{{pwd}}/scripts/minimize.sh"
       ]
+    },
+    {
+      "type": "ansible",
+      "user": "{{user `packer_user`}}",
+      "extra_arguments": ["--verbose", "--diff"],
+      "playbook_file": "{{pwd}}/ansible/playbook.yml"
     }
   ],
   "post-processors": [

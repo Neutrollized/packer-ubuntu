@@ -14,19 +14,3 @@
 ### TODO
 
 Currently `guest_additions_mode` is set to `disabled` and just updating `virtualbox-guest-utils` via `apt-get`, but plan to get the VBoxAdditions.iso version installed during the provisioning step instead
-
-
-#### Misc Notes
-
-```
-    {
-      "type": "shell",
-      "inline": [
-        "sudo mkdir /media/iso",
-        "sudo mount VBoxGuestAdditions.iso /media/iso",
-        "sudo sh -eux /media/iso/VBoxLinuxAdditions.run || echo 'exit code suppressed'",
-        "sudo umount /media/iso",
-        "rm -Rf ~/*.iso"
-      ]
-    }
-```

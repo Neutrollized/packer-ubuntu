@@ -1,9 +1,7 @@
-#!/usr/bin/env bash
-set -x
+#!/bin/bash
+set -eux
 
-
-# remove old kernels
-purge-old-kernels --keep 1 -y
+# remove unneeded packages
 apt-get autoremove --purge -y
 
 # clean apt cache

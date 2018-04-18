@@ -3,6 +3,6 @@
 
   tasks:
   - name: runs sample command
-    command: whoami
-    register: whoami
-  - debug: var=whoami
+    command: uname -a
+    register: output 
+  - debug: var=output

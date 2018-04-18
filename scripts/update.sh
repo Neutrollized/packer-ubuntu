@@ -1,6 +1,5 @@
-#!/usr/bin/env bash
-set -x
+#!/bin/bash
+set -eux
 
 # install updates
-apt-get install -y virtualbox-guest-dkms build-essential linux-headers-virtual
 apt-get dist-upgrade -y

@@ -1,7 +1,7 @@
-#!/usr/bin/env bash
+#!/bin/bash
 # This script minimizes the size of images.
 # It should be run on non-Docker, base Linux images.
-set -x
+set -eux
 
 SWAPUUID="$(/sbin/blkid -o value -l -s UUID -t TYPE=swap)"
 case "$?" in
