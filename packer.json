@@ -77,6 +77,7 @@
       "execute_command": "echo '{{user `packer_user`}}' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
       "scripts": [
         "{{pwd}}/scripts/virtualbox.sh",
+        "{{pwd}}/scripts/install_bcc.sh",
         "{{pwd}}/scripts/update.sh",
         "{{pwd}}/scripts/reboot.sh"
       ]
