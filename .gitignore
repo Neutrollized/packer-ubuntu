@@ -1,4 +1,4 @@
 packer_cache
-iso
+iso/*.iso
 **/output-*
 vagrant_box/*.box

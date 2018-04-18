@@ -76,7 +76,7 @@
       "expect_disconnect": true,
       "execute_command": "echo '{{user `packer_user`}}' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
       "scripts": [
-        "{{pwd}}/scripts/virtualbox-guest.sh",
+        "{{pwd}}/scripts/virtualbox.sh",
         "{{pwd}}/scripts/update.sh",
         "{{pwd}}/scripts/reboot.sh"
       ]
