@@ -13,3 +13,6 @@ rm -f /var/log/*.old
 rm -f /var/log/*.log
 rm -f /var/log/*.log.*
 rm -f /var/log/*.syslog
+
+# forget dhcp lease
+rm -f /var/lib/dhcp/*

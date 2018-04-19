@@ -1,23 +1,26 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # This script minimizes the size of images.
 # It should be run on non-Docker, base Linux images.
+
 set -eux
 
-SWAPUUID="$(/sbin/blkid -o value -l -s UUID -t TYPE=swap)"
+set +e
+swapuuid="$(/sbin/blkid -o value -l -s UUID -t TYPE=swap)"
 case "$?" in
     2|0) ;;
     *) exit 1 ;;
 esac
 
 echo '==> Clear out swap and disable until reboot'
-if [ "x${SWAPUUID}" != "x" ]; then
+if [ "x${swapuuid}" != "x" ]; then
     # Whiteout the swap partition to reduce box size
     # Swap is disabled till reboot
-    SWAPPART="$(readlink -f "/dev/disk/by-uuid/${SWAPUUID}")"
-    /sbin/swapoff "${SWAPPART}"
-    dd if=/dev/zero of="${SWAPPART}" bs=1M || echo "dd exit code $? is suppressed"
-    /sbin/mkswap -U "${SWAPUUID}" "${SWAPPART}"
+    swappart="$(readlink -f "/dev/disk/by-uuid/$swapuuid")"
+    /sbin/swapoff "$swappart"
+    dd if=/dev/zero of="$swappart" bs=1M || echo "dd exit code $? is suppressed"
+    /sbin/mkswap -U "$swapuuid" "$swappart"
 fi
+set -e
 
 dd if=/dev/zero of=/EMPTY bs=1M || echo "dd exit code $? is suppressed"
 rm -f /EMPTY
