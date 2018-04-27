@@ -1,0 +1,112 @@
+{
+  "variables": {
+    "packer_user": "packer",
+    "packer_password": "packer",
+    "cpus": "1",
+    "memory": "2048",
+    "headless": "true",
+    "http_directory": "http/base-ubuntu1804",
+    "iso_name": "{{pwd}}/iso/ubuntu-18.04-live-server-amd64.iso",
+    "iso_checksum": "7a1c2966f82268c14560386fbc467d58c3fbd2793f3b1f657baee609b80d39a8",
+    "iso_checksum_type": "sha256",
+    "guest_os_type": "Ubuntu_64",
+    "vagrant_output_dir": "{{pwd}}/vagrant_box"
+  },
+  "builders": [
+    {
+      "name": "ubuntu-vbox-base",
+      "type": "virtualbox-iso",
+      "iso_url": "{{user `iso_name`}}",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      "guest_os_type": "{{user `guest_os_type`}}",
+      "guest_additions_mode": "disable",
+      "headless": "{{user `headless`}}",
+      "http_directory": "{{ user `http_directory`}}",
+      "disk_size": 30720,
+      "vboxmanage": [
+        ["modifyvm","{{.Name}}","--cpus","{{user `cpus`}}"],
+        ["modifyvm","{{.Name}}","--memory","{{user `memory`}}"],
+        ["modifyvm", "{{.Name}}", "--pae", "on"],
+        ["modifyvm", "{{.Name}}", "--rtcuseutc", "on"],
+        ["modifyvm", "{{.Name}}", "--bioslogodisplaytime", "1"]
+      ],
+      "communicator": "ssh",
+      "ssh_username": "{{user `packer_user`}}",
+      "ssh_password": "{{user `packer_password`}}",
+      "ssh_port": 22,
+      "ssh_timeout": "20m",
+      "shutdown_command": "echo '{{user `packer_user`}}'|sudo -S /sbin/halt -h -p",
+      "boot_wait": "10s",
+      "boot_command": [
+        "<enter><wait><f6><esc><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
+        "/install/vmlinuz<wait>",
+        " auto<wait>",
+        " console-setup/ask_detect=false<wait>",
+        " console-setup/layoutcode=us<wait>",
+        " console-setup/modelcode=pc105<wait>",
+        " debconf/frontend=noninteractive<wait>",
+        " debian-installer=en_US<wait>",
+        " fb=false<wait>",
+        " initrd=/install/initrd.gz<wait>",
+        " kbd-chooser/method=us<wait>",
+        " keyboard-configuration/layout=USA<wait>",
+        " keyboard-configuration/variant=USA<wait>",
+        " locale=en_US<wait>",
+        " netcfg/get_domain=vm<wait>",
+        " netcfg/get_hostname=base-ubuntu1604<wait>",
+        " grub-installer/bootdev=/dev/sda<wait>",
+        " noapic<wait>",
+        " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/vbox-preseed.cfg",
+        " -- <wait>",
+        "<enter><wait>"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "environment_vars": [
+        "PACKER_USER={{user `packer_user`}}",
+        "PACKER_PASSWORD={{user `packer_password`}}"
+      ],
+      "expect_disconnect": true,
+      "execute_command": "echo '{{user `packer_user`}}' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
+      "scripts": [
+        "{{pwd}}/scripts/virtualbox.sh",
+        "{{pwd}}/scripts/update.sh",
+        "{{pwd}}/scripts/reboot.sh"
+      ]
+    },
+    {
+      "type": "shell",
+      "environment_vars": [
+        "PACKER_USER={{user `packer_user`}}",
+        "PACKER_PASSWORD={{user `packer_password`}}"
+      ],
+      "expect_disconnect": true,
+      "execute_command": "echo '{{user `packer_user`}}' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
+      "scripts": [
+        "{{pwd}}/scripts/cleanup.sh",
+        "{{pwd}}/scripts/minimize.sh"
+      ]
+    },
+    {
+      "type": "ansible",
+      "user": "{{user `packer_user`}}",
+      "extra_arguments": ["--verbose", "--diff"],
+      "playbook_file": "{{pwd}}/ansible/playbook.yml"
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "keep_input_artifact": false,
+      "output": "{{user `vagrant_output_dir`}}/base-ubuntu1804.box",
+      "compression_level": 9
+    }
+  ]
+}

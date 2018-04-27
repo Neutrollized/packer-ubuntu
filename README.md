@@ -19,3 +19,5 @@
 ### TODO
 
 Currently `guest_additions_mode` is set to `disabled` and just updating `virtualbox-guest-utils` via `apt-get`, but plan to get the VBoxAdditions.iso version installed during the provisioning step instead
+
+Ubuntu 18.04 build
