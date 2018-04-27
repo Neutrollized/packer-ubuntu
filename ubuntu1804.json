@@ -57,10 +57,10 @@
         " keyboard-configuration/variant=USA<wait>",
         " locale=en_US<wait>",
         " netcfg/get_domain=vm<wait>",
-        " netcfg/get_hostname=base-ubuntu1604<wait>",
+        " netcfg/get_hostname=base-ubuntu1804<wait>",
         " grub-installer/bootdev=/dev/sda<wait>",
         " noapic<wait>",
-        " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/vbox-preseed.cfg",
+        " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/test-preseed.cfg",
         " -- <wait>",
         "<enter><wait>"
       ]
@@ -76,7 +76,6 @@
       "expect_disconnect": true,
       "execute_command": "echo '{{user `packer_user`}}' | {{.Vars}} sudo -S -E sh -eux '{{.Path}}'",
       "scripts": [
-        "{{pwd}}/scripts/virtualbox.sh",
         "{{pwd}}/scripts/update.sh",
         "{{pwd}}/scripts/reboot.sh"
       ]
@@ -93,12 +92,6 @@
         "{{pwd}}/scripts/cleanup.sh",
         "{{pwd}}/scripts/minimize.sh"
       ]
-    },
-    {
-      "type": "ansible",
-      "user": "{{user `packer_user`}}",
-      "extra_arguments": ["--verbose", "--diff"],
-      "playbook_file": "{{pwd}}/ansible/playbook.yml"
     }
   ],
   "post-processors": [
